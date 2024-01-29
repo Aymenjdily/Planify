@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { AlertDialog, Callout, Flex, Switch } from "@radix-ui/themes";
+import { AlertDialog, Callout, Card, Flex, Switch } from "@radix-ui/themes";
 import { Button } from "@/components/ui/button";
 import { Plus, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -17,7 +17,11 @@ import { useSession } from "next-auth/react";
 
 type TaskForm = z.infer<typeof TaskSchema>;
 
-const TaskForm = () => {
+interface Props {
+  isCard?: boolean;
+}
+
+const TaskForm = ({ isCard }: Props) => {
   const [isImportant, setImportant] = useState(false);
   const [isCompleted, setCompleted] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
@@ -31,6 +35,7 @@ const TaskForm = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<TaskForm>({
     resolver: zodResolver(TaskSchema),
@@ -50,7 +55,9 @@ const TaskForm = () => {
         setSuccess(true);
         router.push("/dashboard");
         router.refresh();
-        
+        reset();
+        setCompleted(false);
+        setImportant(false);
       }
     } catch (error) {
       setIsCreating(false);
@@ -64,11 +71,27 @@ const TaskForm = () => {
   return (
     <AlertDialog.Root>
       <AlertDialog.Trigger>
-        <Button className="bg-transparent hover:bg-transparent">
-          <Flex className="text-gray-300 bg-gray-600 rounded-full border" p="2">
-            <Plus />
-          </Flex>
-        </Button>
+        {isCard ? (
+          <Card style={{ background: "#092635" }} className="w-full h-full">
+            <Flex align={"center"} justify={"center"} className="h-full" py="9">
+              <Button className="bg-transparent hover:bg-transparent text-gray-400">
+                <Flex align={"center"} gap="3">
+                  <Plus />
+                  Add New Task
+                </Flex>
+              </Button>
+            </Flex>
+          </Card>
+        ) : (
+          <Button className="bg-transparent hover:bg-transparent">
+            <Flex
+              className="text-gray-300 bg-gray-600 rounded-full border"
+              p="2"
+            >
+              <Plus />
+            </Flex>
+          </Button>
+        )}
       </AlertDialog.Trigger>
       <AlertDialog.Content
         color="gray"

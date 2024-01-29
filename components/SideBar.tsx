@@ -8,6 +8,8 @@ import Link from "next/link";
 import React from "react";
 import classnames from "classnames";
 import { usePathname } from "next/navigation";
+import { LogOut } from 'lucide-react'
+import { Button } from "./ui/button";
 
 const SideBar = () => {
   const pathname = usePathname();
@@ -51,9 +53,14 @@ const SideBar = () => {
           </Link>
         ))}
       </Flex>
-      <p>
-
-      </p>
+      <Flex p="5" className="w-full">
+        <Button className="w-full bg-transparent hover:bg-transparent text-gray-300 text-sm">
+          <Flex align={"center"} gap="3">
+            <LogOut />
+            Log Out
+          </Flex>
+        </Button>
+      </Flex>
     </Flex>
   );
 };
