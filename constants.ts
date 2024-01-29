@@ -1,4 +1,4 @@
-import { Home, Zap, Check, List } from 'lucide-react'
+import { Home, Zap, Check, List, Settings } from 'lucide-react'
 
 export const AdminLinks = [
     { label: "All Tasks", href: "/dashboard", icon: Home },

@@ -5,6 +5,6 @@ export const config = {
         '/dashboard',
         '/completed',
         '/importants',
-        '/notCompleted'
+        '/notCompleted',
     ]
 }
