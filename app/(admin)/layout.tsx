@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Inter, Jaldi, Poppins } from "next/font/google";
 import "../globals.css";
 import '@radix-ui/themes/styles.css';
-import { Theme } from '@radix-ui/themes';
+import { Flex, Theme } from '@radix-ui/themes';
 import AuthProvider from "@/context/AuthProvider";
+import SideBar from "@/components/SideBar";
 
 const inter = Inter({
   subsets: ["latin"]
@@ -24,9 +25,12 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthProvider>
           <Theme>
-            <main>
-              {children}
-            </main>
+            <Flex p="5" className="bg-blackColor min-h-screen" gap="5">
+              <SideBar />
+              <main className="w-full">
+                {children}
+              </main>
+            </Flex>
           </Theme>
         </AuthProvider>
       </body>

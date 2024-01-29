@@ -3,10 +3,11 @@ import Image from "next/image";
 import React from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { MotionDiv } from "./MotionDiv";
 
 const Intro = () => {
   return (
-    <Box className="bg-intro">
+    <Box className="bg-blackColor">
       <Flex
         className="mx-auto max-w-7xl "
         justify={"center"}
@@ -33,18 +34,35 @@ const Intro = () => {
           commitments with ease.
         </p>
         <Flex align={"center"} gap="3">
-            <Button className="bg-blackColor font-semibold">
-                Request demo
+          <Link href="/login">
+            <Button className="bg-lightGreen text-blackColor hover:bg-Green font-semibold shadow-lg">
+              Login
             </Button>
-            <Button className="bg-white text-Green hover:bg-blackColor font-semibold">
-                Give us a feedback
+          </Link>
+          <Link href="/Signup">
+            <Button className="bg-white text-Green hover:bg-blackColor font-semibold shadow-lg">
+              Get Free Account
             </Button>
+          </Link>
         </Flex>
-        <Flex className="relative w-full h-[40vh] rounded-2xl">
-            <Image src="/app.png" alt="app" fill className=" object-cover rounded-2xl" quality={100} />
+        <Flex className="relative w-full h-[70vh] rounded-2xl">
+          <Image
+            src="/intro.jpg"
+            alt="app"
+            fill
+            className="object-cover rounded-2xl shadow-lg"
+            quality={100}
+          />
+          <Box className="absolute w-full h-full bg-blackColor/30" />
         </Flex>
-        <p className="text-gray-800">
-            Start your planning now, <Link href="/login" className="underline underline-offset-8">Get free account</Link>
+        <p className="text-gray-200">
+          Start your planning now,{" "}
+          <Link
+            href="/login"
+            className="underline underline-offset-8 text-lightGreen"
+          >
+            Get free account
+          </Link>
         </p>
       </Flex>
     </Box>
