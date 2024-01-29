@@ -1,16 +1,69 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Task } from "@prisma/client";
 import { Badge, Card, Flex } from "@radix-ui/themes";
-import React from "react";
-import { AlertCircle, FilePenLine, Trash } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Trash, Loader2 } from "lucide-react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import TaskForm from "./Form";
 
 interface Props {
   task: Task;
 }
 
 const TaskCard = ({ task }: Props) => {
+  const [isDeleting, setDeleting] = useState(false);
+  const [isUpdating, setUpdating] = useState(false);
+  const [isCompleted, setCompleted] = useState(task.isCompleted);
+  const router = useRouter();
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    try {
+      const response = await axios.delete(`/api/task/${task.id}`);
+      if (response.status === 201) {
+        router.refresh();
+        setDeleting(false);
+      }
+    } catch (error) {
+      router.refresh();
+    }
+  };
+
+  useEffect(() => {
+    const updateTask = async () => {
+      setUpdating(true);
+
+      try {
+        const response = await axios.patch(`/api/task/${task.id}`, {
+          isCompleted,
+        });
+
+        if (response.status === 201) {
+          router.refresh();
+          setUpdating(false);
+        }
+      } catch (error) {
+        console.error("Error updating task:", error);
+        router.refresh();
+      }
+    };
+
+    // Check if isCompleted has changed and trigger the update
+    if (isCompleted !== task.isCompleted) {
+      updateTask();
+    }
+  }, [isCompleted, task.id, task.isCompleted, router]);
+
+  const handleUpdate = async () => {
+    // Update the state and wait for it to be updated
+    setCompleted((prev) => !prev);
+  };
+
   return (
-    <Card style={{ background: "#092635"}}>
+    <Card style={{ background: "#092635" }}>
       <Flex
         direction={"column"}
         gap="6"
@@ -31,7 +84,7 @@ const TaskCard = ({ task }: Props) => {
             </Flex>
           )}
         </Flex>
-        <Flex align={"end"} justify={"between"}>
+        <Flex align={"end"} justify={"between"} gap="3" wrap={"wrap"}>
           <Flex direction={"column"} gap="2">
             <p className="text-gray-300">{task.createdAt.toDateString()}</p>
             <Button
@@ -40,16 +93,27 @@ const TaskCard = ({ task }: Props) => {
                   ? "bg-Green hover:bg-Green"
                   : "bg-red-500 hover:bg-red-500"
               }`}
+              onClick={() => handleUpdate()}
             >
-              {task.isCompleted ? "Completed" : "Incomplete"}
+              <Flex align={"center"} gap="3">
+                {isUpdating && (
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                )}
+                {task.isCompleted ? "Completed" : "Incomplete"}
+              </Flex>
             </Button>
           </Flex>
-          <Flex align={"center"} gap="3">
-            {/* <Button>
-                <FilePenLine />
-            </Button> */}
-            <Button className="bg-transparent hover:bg-transparent text-gray-300 hover:text-red-500 transition-colors">
+          <Flex align={"center"}>
+            <TaskForm isEdit task={task} />
+            <Button
+              className="bg-transparent hover:bg-transparent text-gray-300 hover:text-red-500 transition-colors"
+              onClick={() => handleDelete()}
+            >
+              {isDeleting ? (
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              ) : (
                 <Trash />
+              )}
             </Button>
           </Flex>
         </Flex>

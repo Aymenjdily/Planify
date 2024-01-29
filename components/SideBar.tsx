@@ -10,6 +10,7 @@ import classnames from "classnames";
 import { usePathname } from "next/navigation";
 import { LogOut } from 'lucide-react'
 import { Button } from "./ui/button";
+import { signOut } from "next-auth/react";
 
 const SideBar = () => {
   const pathname = usePathname();
@@ -54,7 +55,7 @@ const SideBar = () => {
         ))}
       </Flex>
       <Flex p="5" className="w-full">
-        <Button className="w-full bg-transparent hover:bg-transparent text-gray-300 text-sm">
+        <Button className="w-full bg-transparent hover:bg-transparent text-gray-300 text-sm" onClick={() => signOut()}>
           <Flex align={"center"} gap="3">
             <LogOut />
             Log Out

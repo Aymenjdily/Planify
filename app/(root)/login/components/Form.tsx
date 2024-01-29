@@ -68,7 +68,7 @@ const LoginForm = () => {
           type="submit"
           className="bg-Green hover:bg-darkGreen flex items-center gap-3"
         >
-          Sign Up{" "}
+          Log In{" "}
           {isLogin && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
         </Button>
         <ErrorMessage>{error}</ErrorMessage>
